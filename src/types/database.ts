@@ -16,7 +16,7 @@ export interface Concept {
 export interface Subscription {
   id: string; user_id: string; card_id: string; concept_id: string | null; name: string;
   amount: number; currency: string; cycle: BillingCycle; billing_day: number | null;
-  start_date: string; next_charge_date: string; is_active: boolean; notes: string | null;
+  start_date: string; end_date: string | null; next_charge_date: string; is_active: boolean; notes: string | null;
   created_at: string; updated_at: string;
 }
 

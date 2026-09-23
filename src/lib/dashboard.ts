@@ -20,12 +20,13 @@ export function buildMonthDashboard(month: MonthKey, expenses: ExpenseWithRelati
 function subscriptionOccursInMonth(subscription: Subscription, month: MonthKey) {
   const [year, targetMonth] = month.split("-").map(Number);
   const start = new Date(`${subscription.start_date}T12:00:00`);
+  const monthEnd = new Date(year, targetMonth, 0);
+  if (subscription.end_date && new Date(`${subscription.end_date}T12:00:00`) < new Date(year, targetMonth - 1, 1)) return false;
   const monthsSinceStart = (year - start.getFullYear()) * 12 + (targetMonth - 1 - start.getMonth());
   if (monthsSinceStart < 0) return false;
   if (subscription.cycle === "monthly") return true;
   if (subscription.cycle === "yearly") return monthsSinceStart % 12 === 0;
   const monthStart = new Date(year, targetMonth - 1, 1);
-  const monthEnd = new Date(year, targetMonth, 0);
   const daysUntilMonth = Math.ceil((monthStart.getTime() - start.getTime()) / 86_400_000);
   const firstCharge = Math.max(0, Math.ceil(daysUntilMonth / 7)) * 7;
   return new Date(start.getTime() + firstCharge * 86_400_000) <= monthEnd;
